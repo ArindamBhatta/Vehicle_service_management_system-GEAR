@@ -1,7 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learn_riverpod/todo_model.dart';
-import 'package:learn_riverpod/provider.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:learn_riverpod/core/provider/provider.dart';
+import 'package:learn_riverpod/core/utils/logger.dart';
+
+class AppRoute {
+  static const splash = '/splash';
+  static const login = '/login';
+  static const roleSelection = '/role-selection';
+  static const onboardingTravelerAgant = '/onboarding/travel_agent';
+  static const onboardingTraveler = '/onboarding/traveler';
+  static const agantProfile = '/travel/agent_profile';
+  static const travelSpotDashBoard = '/travel_dashboard';
+}
+
+// Provider for the GoRouter instance
+final routerProvider = Provider<GoRouter>((ref) {
+  // Watch essential providers
+  final authState = ref.watch(authStateChangesProvider);
+  // final currentUser = ref.watch(currentUserProvider);
+
+  return GoRouter(
+    initialLocation: AppRoute.splash,
+    debugLogDiagnostics: true,
+    routes: [
+      GoRoute(
+        path: AppRoute.splash,
+        name: 'splash',
+        builder: (context, state) => Container(),
+      ),
+
+      GoRoute(
+        path: AppRoute.login,
+        name: 'login',
+        builder: (context, state) => Container(),
+      ),
+
+      GoRoute(
+        path: AppRoute.roleSelection,
+        name: 'role-selection',
+        builder: (context, state) => Container(),
+      ),
+
+      GoRoute(
+        path: AppRoute.onboardingTravelerAgant,
+        name: 'onboarding/travel_agent',
+        builder: (context, state) => Container(),
+      ),
+
+      GoRoute(
+        path: AppRoute.onboardingTraveler,
+        name: 'onboarding/traveler',
+        builder: (context, state) => Container(),
+      ),
+
+      GoRoute(
+        path: AppRoute.agantProfile,
+        name: 'travel/agent_profile',
+        builder: (context, state) => Container(),
+      ),
+      // GoRoute(
+      //   path: AppRoute.travelSpotDashBoard,
+      //   name: 'travel_dashboard',
+      //   builder: (context, state) => const ChatOverlay(
+      //     currentRoute: AppRoute.travelSpotDashBoard,
+      //     child: TravelSpotDashBoardPage(),
+      //   ),
+      // ),
+    ],
+    //defined redriect logic
+    redirect: (BuildContext context, GoRouterState state) {
+      final currentPath = state.matchedLocation;
+      AppLogger.logger.d("Redirect check: Current location = $currentPath");
+
+      // Stay on splash until user manually moves
+      // if (authState.isLoading || currentLocation == AppRoute.splash) {
+      //   return null; // Stay on splash until user manually moves
+      // }
+    },
+  );
+});
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -18,116 +97,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: TodoPage(),
-    );
-  }
-}
-
-class TodoPage extends ConsumerWidget {
-  const TodoPage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final List<TodoModel> todos = ref.watch(todoProvider);
-    final String appTitle = ref.read(appTitleProvider);
-    final TextEditingController titleController = TextEditingController();
-
-    return Scaffold(
-      appBar: AppBar(title: Text(appTitle)),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(hintText: 'Add new todo'),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    if (titleController.text.trim().isNotEmpty) {
-                      ref
-                          .read(todoProvider.notifier)
-                          .addTodo(titleController.text);
-                      titleController.clear();
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
-                return ListTile(
-                  leading: Checkbox(
-                    value: todo.isCompleted,
-                    onChanged: (_) =>
-                        ref.read(todoProvider.notifier).toggleTodo(todo.id),
-                  ),
-                  title: Text(
-                    todo.title,
-                    style: TextStyle(
-                      decoration: todo.isCompleted
-                          ? TextDecoration.lineThrough
-                          : null,
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          _showEditDialog(context, ref, todo);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () =>
-                            ref.read(todoProvider.notifier).deleteTodo(todo.id),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEditDialog(BuildContext context, WidgetRef ref, TodoModel todo) {
-    final editController = TextEditingController(text: todo.title);
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Edit Todo"),
-        content: TextField(controller: editController),
-        actions: [
-          TextButton(
-            onPressed: () {
-              final newText = editController.text.trim();
-              if (newText.isNotEmpty) {
-                ref.read(todoProvider.notifier).updateTodo(todo.id, newText);
-                Navigator.pop(context);
-              }
-            },
-            child: const Text("Save"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-        ],
-      ),
+      home: Container(),
     );
   }
 }
