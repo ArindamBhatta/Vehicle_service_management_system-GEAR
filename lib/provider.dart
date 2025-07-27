@@ -18,11 +18,7 @@ class TodoNotifier extends StateNotifier<List<TodoModel>> {
   TodoNotifier() : super([]);
 
   void addTodo(String title) {
-    final newTodo = TodoModel(
-      id: DateTime.now().toString(),
-      title: title,
-      description: '',
-    );
+    final newTodo = TodoModel(id: DateTime.now().toString(), title: title);
     state = [...state, newTodo]; //update the state with the new todo
   }
 

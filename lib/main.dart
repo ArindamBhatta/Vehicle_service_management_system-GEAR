@@ -10,11 +10,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
@@ -30,7 +30,7 @@ class TodoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final List<TodoModel> todos = ref.watch(todoProvider);
     final String appTitle = ref.read(appTitleProvider);
-    final TextEditingController controller = TextEditingController();
+    final TextEditingController titleController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(title: Text(appTitle)),
@@ -42,16 +42,18 @@ class TodoPage extends ConsumerWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: controller,
+                    controller: titleController,
                     decoration: const InputDecoration(hintText: 'Add new todo'),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    if (controller.text.trim().isNotEmpty) {
-                      ref.read(todoProvider.notifier).addTodo(controller.text);
-                      controller.clear();
+                    if (titleController.text.trim().isNotEmpty) {
+                      ref
+                          .read(todoProvider.notifier)
+                          .addTodo(titleController.text);
+                      titleController.clear();
                     }
                   },
                 ),
