@@ -1,4 +1,3 @@
-// Curd operation done here for vehicle management
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:learn_riverpod/core/model/Vehicle_image_model.dart';
 import 'package:learn_riverpod/core/model/dropdown_model.dart';
