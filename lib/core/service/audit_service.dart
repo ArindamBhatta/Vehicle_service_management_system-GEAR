@@ -11,7 +11,7 @@ class AuditService {
   /// Logs a chat project query audit log
   Future<void> logProjectQuery({
     required String userId,
-
+    String? queryText,
     String? queryType,
     int? resultCount,
     String? errorMessage,
@@ -24,7 +24,8 @@ class AuditService {
         'timestamp': timeStamp.toIso8601String(),
         'resource_type': 'chat',
         'action': 'query',
-        'query-text': queryType,
+        'query-text': queryText,
+        'query-type': queryType,
         'result_count': resultCount,
         'error_message': errorMessage,
       });
