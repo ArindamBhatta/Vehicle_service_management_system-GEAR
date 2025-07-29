@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:learn_riverpod/core/provider/provider.dart';
+import 'package:learn_riverpod/core/provider/auth_provider.dart';
 import 'package:learn_riverpod/core/utils/logger.dart';
 
 class AppRoute {
