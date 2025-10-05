@@ -1,4 +1,4 @@
-import 'package:learn_riverpod/core/utils/logger.dart';
+import 'package:gear_app/core/utils/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
@@ -62,6 +62,7 @@ class AuthService {
         throw 'Sign up failed: ${error.message}';
       }
     }
+    return null;
   }
 
   Future<User?> signIn({
@@ -78,6 +79,7 @@ class AuthService {
     } catch (e) {
       AppLogger.logger.e('Error signing in for $email', error: e);
     }
+    return null;
   }
 
   Future<void> signOut() async {

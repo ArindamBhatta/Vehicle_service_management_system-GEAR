@@ -1,4 +1,4 @@
-import 'package:learn_riverpod/core/globals/user_role.dart';
+import 'package:gear_app/core/globals/user_role.dart';
 
 class AppUser {
   final String id;
@@ -72,8 +72,8 @@ class AppUser {
       firstName: json['first_name'],
       lastName: json['last_name'],
       profileImageUrl: json['photo_url'],
-      role: _roleFromId(json['role_id']),
-      shopIds: _shopIdFromJson(json['shop_id']),
+      role: UserRole.fromString(json['role']),
+      shopIds: [],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'])
@@ -93,8 +93,6 @@ class AppUser {
       'first_name': firstName,
       'last_name': lastName,
       'photo_url': profileImageUrl,
-      'role_id': _roleToId(role),
-      'shop_id': _shopIdToJson(shopIds),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
       'device_id': deviceId,
@@ -105,65 +103,4 @@ class AppUser {
 
   String get fullName =>
       [firstName, lastName].where((e) => e?.isNotEmpty ?? false).join(' ');
-
-  bool hasCapability(UserCapability capability) {
-    return role.hasCapability(capability);
-  }
-}
-
-// Helper functions for role_id and shop_id
-
-UserRole _roleFromId(dynamic roleId) {
-  switch (roleId) {
-    case 1:
-      return UserRole.carOwner;
-    case 2:
-      return UserRole.shopOwner;
-    case 3:
-      return UserRole.shopEmployee;
-    case 4:
-      return UserRole.appraiser;
-    case 5:
-      return UserRole.whiteGloveOfficer;
-    case 6:
-      return UserRole.admin;
-    case 0:
-      return UserRole.undefined;
-    default:
-      return UserRole.customer;
-  }
-}
-
-int _roleToId(UserRole role) {
-  switch (role) {
-    case UserRole.carOwner:
-      return 1;
-    case UserRole.shopOwner:
-      return 2;
-    case UserRole.shopEmployee:
-      return 3;
-    case UserRole.appraiser:
-      return 4;
-    case UserRole.whiteGloveOfficer:
-      return 5;
-    case UserRole.admin:
-      return 6;
-    case UserRole.customer:
-      return 1;
-    case UserRole.undefined:
-      return 0;
-  }
-}
-
-List<String> _shopIdFromJson(dynamic shopId) {
-  if (shopId is String) {
-    return [shopId];
-  } else if (shopId is List) {
-    return List<String>.from(shopId);
-  }
-  return [];
-}
-
-String? _shopIdToJson(List<String> shopIds) {
-  return shopIds.isNotEmpty ? shopIds.first : null;
 }

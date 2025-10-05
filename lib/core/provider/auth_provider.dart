@@ -1,19 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learn_riverpod/core/service/audit_service.dart';
-import 'package:learn_riverpod/core/service/auth_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-// ------ CORE PROVIDER FILE ------
+import 'package:gear_app/core/service/auth_service.dart';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Step 1: Connect with Database read only
 final supabaseClientProvider = Provider<SupabaseClient>((ref) {
   return Supabase.instance.client;
-});
-
-//step 2:
-final auditServiceProvider = Provider((ref) {
-  final client = ref.watch(supabaseClientProvider);
-  return AuditService(client);
 });
 
 //step 3: handel authentication state changes login, logout, etc.
